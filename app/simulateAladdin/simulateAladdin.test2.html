@@ -1,0 +1,202 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0 user-scalable=no, " />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="format-detection" content="telephone=no, email=no" />
+  <meta name="full-screen" content="true" />
+  <meta name="screen-orientation" content="portrait" />
+  <meta name="x5-fullscreen" content="true" />
+  <meta name="360-fullscreen" content="true" />
+  <meta name="screen-orientation" content="portrait">
+  <meta name="x5-orientation" content="portrait">
+  <title>event.resize</title>
+  <style type="text/css">
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  ::-webkit-scrollbar {
+    width: 0.8rem;
+    height: 0.8rem;
+    background-color: #eee;
+  }
+  /*定义滚动条轨道 内阴影+圆角*/
+
+  ::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 0.4rem rgba(0, 0, 0, 0.3);
+    border-radius: 0.8rem;
+    background-color: #eee;
+  }
+  /*定义滑块 内阴影+圆角*/
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 0.8rem;
+    -webkit-box-shadow: inset 0 0 0.4rem rgba(0, 0, 0, .3);
+    background-color: #ccc;
+  }
+
+  #page-hd {
+    height: 100px;
+    border: 1px solid red;
+  }
+
+  #page {
+    height: 2000px;
+    border: 1px solid red;
+    position: relative;
+    background: -webkit-linear-gradient(#fff, #31ABF3);
+    /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(#fff, #31ABF3);
+    /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(#fff, #31ABF3);
+    /* Firefox 3.6 - 15 */
+    background: linear-gradient(#fff, #31ABF3);
+    /* 标准的语法 */
+  }
+
+  .egg-box {
+    background: rgba(0, 0, 0, 0.2);
+    width: 100%;
+    height: 80%;
+    /*top: 20%;*/
+    bottom: 0;
+    left: 0%;
+    position: fixed;
+  }
+
+  .p-input {
+    /*margin:10px 0 ;*/
+    border: 2px solid blue;
+    width: 100%;
+    box-sizing: border-box;
+    /*clear: both;*/
+    display: block;
+  }
+
+  input {
+    border: 1px solid #999;
+    height: 3rem;
+    display: block;
+    background: #eee;
+    width: 100%；
+  }
+
+  .red {
+    color: red;
+  }
+
+  .fixed-bottom {
+    position: fixed;
+    bottom: 0;
+    width: 50%;
+  }
+
+  .absolute-bottom {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 50%;
+  }
+  </style>
+</head>
+
+<body>
+  <div id="page-hd">page-hd</div>
+  <div id="page">
+    <div class="egg-box">
+      <div>
+        <h3>思路</h3>
+        <p>fixed 到页面底部</p>
+        <p>input focus 时候滚动到底，blur时候scrolltop(0)</p>
+        <p>测试用 input touchstart 滚动到底部，经常发生touch事件触发，focus不触发情况</p>
+        <p>测试 input click 事件 要在focus 之后触发</p>
+      </div>
+      <div class="ios">
+        <h3>ios</h3>
+        <p class='red'>微信：异常，会跳到中间</p>
+        <p class='red'>手百: 异常，会跳到中间</p>
+        <p class='red'>百度预览器：异常，输入框会被遮住</p>
+        <p>uc ：正常</p>
+        <p>qq：正常</p>
+      </div>
+      <p class='p-input fixed-bottom'>fixed-bottom
+        <input class='input-e' type="text" placeholder="aaaa">
+      </p>
+      <p class='p-input absolute-bottom'>absolute-bottom
+        <input class='input-e' type="text" placeholder="aaaa">
+      </p>
+    </div>
+  </div>
+  <script src="http://libs.baidu.com/jquery/1.10.0/jquery.min.js"></script>
+  <script>
+  $(function() {
+
+    var WW = window.innerWidth;
+    var WH = window.innerHeight;
+
+    var radio;
+    var $ph = $('#page-hd');
+    var $page = $('#page');
+
+    function initFrame() {
+      $('#page-hd').on('touchmove.qmj', function() {
+        return false;
+      });
+
+      var touchStartY;
+
+
+      $('.egg-box').on('touchmove.qmj', function() {
+        return false;
+      });
+
+      // $('#page').on('touchstart.qmj', function(e) {
+      //   touchStartY = e.touches[0].pageY;
+      // });
+
+      // $('#page').on('touchmove.qmj', function(e) {
+      //   var touchMoveY = Math.abs(e.touches[0].pageY - touchStartY);
+      //   // if (!isDestoried && touchMoveY > 5) {
+      //   //   destroy();
+      //   // };
+      // });
+      // $('input').on('touchstart', function() {
+      //   $('body').scrollTop(10000);
+      // });
+      // $('input').click(function() {
+      //   console.log('click');
+      // });
+      $('input').focus(function() {
+        console.log('focus');
+        $('body').scrollTop(10000);
+
+      }).blur(function() {
+        // body...
+        $('body').scrollTop(0);
+
+      });
+
+      $(window).resize(function(argument) {
+        // body...
+        WH = window.innerHeight;
+        console.log('resize WH', WH);
+        $('input').val('w height:' + WH);
+        $('#page-hd').text('w height:' + WH);
+
+      });
+
+
+    }
+
+    initFrame();
+
+  });
+  </script>
+</body>
+
+</html>

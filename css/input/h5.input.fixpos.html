@@ -1,0 +1,139 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0 user-scalable=no, " />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="format-detection" content="telephone=no, email=no" />
+  <meta name="full-screen" content="true" />
+  <meta name="screen-orientation" content="portrait" />
+  <meta name="x5-fullscreen" content="true" />
+  <meta name="360-fullscreen" content="true" />
+  <meta name="screen-orientation" content="portrait">
+  <meta name="x5-orientation" content="portrait">
+  <title>event.resize</title>
+  <style type="text/css">
+  *{
+    margin:0;
+    padding:0;
+  }
+  html {
+    background: #eee;
+  }
+
+  body {
+    background: #C9E4F0;
+    outline: 1px solid blue;
+    width: 100%;
+    height: 100%;
+    overflow-y:hidden;
+    position: absolute;
+    top:0;
+    left:0;
+  }
+
+  .page {
+    background: #fff;
+    width: 100%;
+    height: 100%;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    -webkit-transform: translate(-50%, -50%);
+  }
+
+  .p-input{
+    /*margin:10px 0 ;*/
+    border:2px solid blue;
+    width: 100%;
+    box-sizing:border-box;
+    clear:both;
+
+  }
+  input {
+    /*width: 200px;*/
+    border: 1px solid #999;
+    height: 3rem;
+    display: inline-block;
+    float: right;
+    background: #eee;
+  }
+  .pos-rel{
+    margin-top:150px;
+    position: relative;
+  }
+  .fixed-top{
+    width: 50%;
+    position: fixed;
+    top: 0;
+  }
+  .absolute-top{
+    width: 50%;
+    position: fixed;
+    top: 0;
+    right: 0
+  }
+  .fixed-bottom{
+    position: fixed;
+    bottom: 0;
+    width: 50%;
+  }
+  .absolute-bottom{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 50%;
+  }
+  </style>
+</head>
+
+<body>
+  <div class="page p1">
+    <p class='p-input fixed-top'>fixed-top<input class='input-e' type="text" placeholder="aaaa"></p>
+    <p class='p-input absolute-top'>absolute-top<input class='input-e' type="text" placeholder="aaaa"></p>
+    <p class='p-input pos-rel'>relative<input class='input-a' type="text"  placeholder="aaaa"></p>
+    <p class='p-input fixed-bottom'>fixed-bottom<textarea class='input-e' type="text" placeholder="aaaa"></textarea>
+    <p class='p-input absolute-bottom'>absolute-bottom<textarea class='input-e' type="text" placeholder="aaaa"></textarea>
+  </div>
+  <script src="http://libs.baidu.com/jquery/1.10.0/jquery.min.js"></script>
+  <script src="http://cdn.bootcss.com/jquery.transit/0.9.12/jquery.transit.min.js"></script>
+  <script>
+  // 这里body 可以改成page,注意需要给page添加定位
+  $(function() {
+    function isAndroid() {
+      var userAgentInfo = navigator.userAgent;
+      if (userAgentInfo.indexOf('Android') > 0) {
+        // alert('Android')
+        return true;
+      }
+      return false;
+    }
+
+    var WW = $(window).width();
+    var WH = $(window).height();
+    var r_wh, r_ww;
+    var radio;
+
+    $('.window-height').text('window height:' + WH);
+    if (isAndroid()) {
+      $('.page').css({
+        width: WW,
+        height: WH
+      });
+    } else {
+      // ios时候，系统会自动移动 input 位置
+    }
+    // $('.input-a').focus();
+
+
+
+
+
+
+  });
+  </script>
+</body>
+
+</html>

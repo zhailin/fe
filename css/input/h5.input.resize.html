@@ -1,0 +1,184 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0 user-scalable=no, " />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="format-detection" content="telephone=no, email=no" />
+  <meta name="full-screen" content="true" />
+  <meta name="screen-orientation" content="portrait" />
+  <meta name="x5-fullscreen" content="true" />
+  <meta name="360-fullscreen" content="true" />
+  <meta name="screen-orientation" content="portrait">
+  <meta name="x5-orientation" content="portrait">
+  <title>event.resize</title>
+
+  <style type="text/css">
+  *{
+    margin:0;
+    padding:0;
+  }
+  html {
+    background: #eee;
+  }
+
+  body {
+    background: #C9E4F0;
+    outline: 1px solid blue;
+    width: 100%;
+    height: 100%;
+    overflow-y:hidden;
+    position: absolute;
+  }
+
+  .page {
+    background: #fff;
+    width: 100%;
+    height: 100%;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    -webkit-transform: translate(-50%, -50%);
+    overflow: hidden;
+  }
+
+  .input-box {
+    width: 80%;
+    margin-left: 10%;
+    padding: 20px 0;
+    position: relative;
+    top: 50px;
+    border: 1px solid red;
+    box-sizing:border-box;
+  }
+  .p-input{
+    margin:20px 0 ;
+  }
+  input {
+    width: 80%;
+    border: 1px solid #eee;
+    height: 3rem;
+  }
+
+  .window-height {
+    font-size: 20px;
+    text-align: center;
+    position: absolute;
+    bottom: 20px;
+    left: 0px;
+    width: 100%;
+  }
+  </style>
+</head>
+
+<body>
+  <div class="page p1">
+    <!-- <p class="window-height"></p> -->
+    <div class="input-box">
+      <p class='p-input'>1<input class='input-a' type="text"></p>
+      <p class='p-input'>2<input class='input-b' type="text"></p>
+      <p class='p-input'>3<input class='input-c' type="text"></p>
+      <p class='p-input'>4<input class='input-d' type="text"></p>
+      <p class='p-input'>5<input class='input-d' type="text"></p>
+      <p class='p-input'>6<input class='input-d' type="text"></p>
+      <p class='p-input'>7<input class='input-d' type="text"></p>
+      <p class='p-input'>8<input class='input-d' type="text"></p>
+      <p class="offset-top otl-g"></p>
+      <!-- <p class='p-input pos-bottom'>5<input class='input-e' type="text"></p> -->
+    </div>
+  </div>
+  <script src="http://libs.baidu.com/jquery/1.10.0/jquery.min.js"></script>
+  <script src="http://cdn.bootcss.com/jquery.transit/0.9.12/jquery.transit.min.js"></script>
+  <script>
+  // 这里body 可以改成page,注意需要给page添加定位
+  $(function() {
+
+
+    function isAndroid() {
+      var userAgentInfo = navigator.userAgent;
+      if (userAgentInfo.indexOf('Android') > 0) {
+        // alert('Android')
+        return true;
+      }
+      return false;
+    }
+
+    var WW = window.innerWidth;
+    var WH = window.innerHeight;
+    var r_wh, r_ww;
+    var radio;
+
+    $('input').val(WH);
+    window.resize = function () {
+      WH = window.innerHeight;
+      $('input').val(WH);
+    }
+    window.resize();
+    // if (isAndroid()) {
+    //   $('.page').css({
+    //     width: WW,
+    //     height: WH
+    //   });
+    //   inputScale();
+    // } else {
+    //   // ios时候，系统会自动移动 input 位置
+    // }
+
+    function inputScale() {
+      $(window).resize(function() {
+        r_wh = $(window).height();
+        r_ww = WW * r_wh / WH;
+        $('.window-height').text('window height:' + r_wh);
+
+        $('.page').transition({
+          x: '-50%',
+          y: '-50%',
+          scale: r_wh / WH
+        });
+      });
+    }
+    // 下面的方法在按下键盘区键盘隐藏按钮时，input仍处于focus 状态，不适合。
+    function inputTransition() {
+
+      // var offsetA = $('.input-a').offset();
+      // var offsetB = $('.input-b').offset();
+      // var offsetC = $('.input-c').offset();
+      // console.log('offsetA',offsetA.top,offsetA.left);
+      // console.log('offsetB',offsetB.top,offsetB.left);
+      // console.log('offsetC',offsetC.top,offsetC.left);
+      var offsetInputs = [];
+      for (var i = 0; i < $('.input-box input').length; i++) {
+        offsetInputs[i] = $('.input-box input').eq(i).offset();
+        console.log(offsetInputs[i].top);
+      }
+      var offsetInputBox = $('.input-box').offset();
+
+
+      $('.input-box input').focus(function() {
+        var $this = $(this);
+        var index = $this.parents('.p-input').index();
+        var offset = offsetInputs[index];
+        console.log('offset', offset.top, offset.left);
+        $('.offset-top').text(offset.top);
+        $('.page').stop(true).transition({
+          y: 50-offset.top,
+          x: '-50%'
+        }, 300, 'linear', function() {
+          // $this.focus();
+        });
+      });
+      $('.input-box input').blur(function() {
+        $('.page').stop(true).transition({
+          y: 0,
+          x: '-50%'
+        }, 300, 'linear');
+      });
+    }
+
+  });
+  </script>
+</body>
+
+</html>
